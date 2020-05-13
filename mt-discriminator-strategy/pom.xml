@@ -8,10 +8,10 @@
 		<version>2.2.7.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.yethi</groupId>
-	<artifactId>multi-tenant-app</artifactId>
+	<groupId>org.sriram</groupId>
+	<artifactId>mt-discriminator-strategy</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>multi-tenant-app</name>
+	<name>mt-discriminator-strategy</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
