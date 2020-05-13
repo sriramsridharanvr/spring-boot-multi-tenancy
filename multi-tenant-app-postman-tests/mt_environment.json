@@ -1,0 +1,19 @@
+{
+	"id": "6998052e-32c2-41f1-8025-f4f5abdadfa4",
+	"name": "Multi Tenancy",
+	"values": [
+		{
+			"key": "tenant_1_id",
+			"value": "T1",
+			"enabled": true
+		},
+		{
+			"key": "tenant_2_id",
+			"value": "T2",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2020-05-13T11:39:22.981Z",
+	"_postman_exported_using": "Postman/7.24.0"
+}

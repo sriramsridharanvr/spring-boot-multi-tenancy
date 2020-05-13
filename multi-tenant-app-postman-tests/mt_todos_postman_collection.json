@@ -1,0 +1,931 @@
+{
+	"info": {
+		"_postman_id": "b399940e-4828-492a-93c4-1aeb8a4b616c",
+		"name": "Multi Tenanted Todo App",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Tenant 1",
+			"item": [
+				{
+					"name": "Create Todo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3acdaf2b-d4a9-4ed8-99ee-019573a67c67",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const todo = pm.response.json();\r",
+									"pm.globals.set(\"t1_todo_id_1\", todo.todoId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"text\":\"{{tenant_1_id}} - First Todo\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/todos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"todos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create another Todo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "133bee49-df8c-4e7a-8dd8-1dc54ad6c648",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const todo = pm.response.json();\r",
+									"pm.globals.set(\"t1_todo_id_2\", todo.todoId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"text\":\"{{tenant_1_id}} - Second Todo\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/todos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"todos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Todos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "67e77077-ce0b-4d8c-86c0-7abe3a70605c",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"pm.test(\"2 Todos are returned\", function () {\r",
+									"    pm.expect(jsonData.length).to.eql(2);\r",
+									"});\r",
+									"\r",
+									"jsonData.forEach(todo => {\r",
+									"    pm.test(\"Tenant data is isolated\", function () {\r",
+									"        pm.expect(todo.tenantId).to.eql(pm.variables.get(\"tenant_1_id\"));\r",
+									"    });\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"text\":\"Implement a Multi tenant todo app\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/todos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"todos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Todo by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0a3ac13c-05bf-4da9-823b-610604979438",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const todo = pm.response.json();\r",
+									"\r",
+									"pm.test(\"The right todo is fetched\", function () {\r",
+									"    pm.expect(todo.todoId).to.eql(pm.globals.get(\"t1_todo_id_2\"));\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"text\":\"Implement a Multi tenant todo app\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/todos/{{t1_todo_id_2}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"todos",
+								"{{t1_todo_id_2}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Complete Todo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3ad81d63-abfb-4e9d-9075-d3913d83df87",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/todos/{{t1_todo_id_2}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"todos",
+								"{{t1_todo_id_2}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Pending Todos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "bfb39b7d-304b-466b-ae20-75d2c19544ae",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"pm.test(\"1 Todo are returned\", function () {\r",
+									"    pm.expect(jsonData.length).to.eql(1);\r",
+									"});\r",
+									"\r",
+									"jsonData.forEach(todo => {\r",
+									"    pm.test(\"Tenant data is isolated\", function () {\r",
+									"        pm.expect(todo.tenantId).to.eql(pm.variables.get(\"tenant_1_id\"));\r",
+									"    });\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/todos?status=pending",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"todos"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "pending"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mark todo as pending",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1fa4f015-0075-457f-b8d2-c62c482fd719",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/todos/{{t1_todo_id_2}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"todos",
+								"{{t1_todo_id_2}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Pending Todos Again",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "79e31b41-8246-4a68-aa71-c184ddc51d7f",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"pm.test(\"2 Todos are returned\", function () {\r",
+									"    pm.expect(jsonData.length).to.eql(2);\r",
+									"});\r",
+									"\r",
+									"jsonData.forEach(todo => {\r",
+									"    pm.test(\"Tenant data is isolated\", function () {\r",
+									"        pm.expect(todo.tenantId).to.eql(pm.variables.get(\"tenant_1_id\"));\r",
+									"    });\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/todos?status=pending",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"todos"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "pending"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "5f98886a-0b5f-4d57-9fb8-5e923092fc18",
+						"type": "text/javascript",
+						"exec": [
+							"pm.request.headers.add({ key: 'X-TENANT-ID', value: pm.variables.get(\"tenant_1_id\") });"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "4143125d-dd28-4cb3-9917-fb14f94b565d",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Tenant 2",
+			"item": [
+				{
+					"name": "Create Todo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "432adfd4-64dc-48a5-b4bc-9b66de289e85",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const todo = pm.response.json();\r",
+									"pm.globals.set(\"t2_todo_id_1\", todo.todoId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"text\":\"{{tenant_2_id}} - First Todo\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/todos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"todos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create another Todo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "837f050b-3d9b-4075-9590-4d7ddbee0dcf",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const todo = pm.response.json();\r",
+									"pm.globals.set(\"t2_todo_id_2\", todo.todoId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"text\":\"{{tenant_2_id}} - Second Todo\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/todos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"todos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Todos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5e195aab-0359-4d01-8b56-dcece21097e8",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"pm.test(\"2 Todos are returned\", function () {\r",
+									"    pm.expect(jsonData.length).to.eql(2);\r",
+									"});\r",
+									"\r",
+									"jsonData.forEach(todo => {\r",
+									"    pm.test(\"Tenant data is isolated\", function () {\r",
+									"        pm.expect(todo.tenantId).to.eql(pm.variables.get(\"tenant_2_id\"));\r",
+									"    });\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/todos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"todos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Todo by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2eda33f5-0d08-4111-96d9-f43ad1962ed9",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const todo = pm.response.json();\r",
+									"\r",
+									"pm.test(\"The right todo is fetched\", function () {\r",
+									"    pm.expect(todo.todoId).to.eql(pm.globals.get(\"t2_todo_id_2\"));\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"text\":\"Implement a Multi tenant todo app\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/todos/{{t2_todo_id_2}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"todos",
+								"{{t2_todo_id_2}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Complete Todo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f9e3e307-e93d-4448-beaa-19bbb9ff571a",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/todos/{{t2_todo_id_2}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"todos",
+								"{{t2_todo_id_2}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Pending Todos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9cb58ffc-eff0-4fad-9594-67dd8b7144df",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"pm.test(\"1 Todo are returned\", function () {\r",
+									"    pm.expect(jsonData.length).to.eql(1);\r",
+									"});\r",
+									"\r",
+									"jsonData.forEach(todo => {\r",
+									"    pm.test(\"Tenant data is isolated\", function () {\r",
+									"        pm.expect(todo.tenantId).to.eql(pm.variables.get(\"tenant_2_id\"));\r",
+									"    });\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/todos?status=pending",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"todos"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "pending"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mark todo as pending",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "71bd0387-c188-41ff-ba4e-5ef21ad0722a",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/todos/{{t2_todo_id_2}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"todos",
+								"{{t2_todo_id_2}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Pending Todos Again",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8e644835-385f-4304-9a3d-b172c3c017e8",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"pm.test(\"2 Todos are returned\", function () {\r",
+									"    pm.expect(jsonData.length).to.eql(2);\r",
+									"});\r",
+									"\r",
+									"jsonData.forEach(todo => {\r",
+									"    pm.test(\"Tenant data is isolated\", function () {\r",
+									"        pm.expect(todo.tenantId).to.eql(pm.variables.get(\"tenant_2_id\"));\r",
+									"    });\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/todos?status=pending",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"todos"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "pending"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "885855b2-0bb4-4507-9bbe-87dbc2a57292",
+						"type": "text/javascript",
+						"exec": [
+							"pm.request.headers.add({ key: 'X-TENANT-ID', value: pm.variables.get(\"tenant_2_id\") });"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "2a022d09-327e-480d-bca6-64b892068325",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Data Isolation Tests",
+			"item": [
+				{
+					"name": "Get Tenant 2 Todo As Tenant 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0e3f9042-012f-4823-a44b-da320070f467",
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-TENANT-ID",
+								"value": "{{tenant_1_id}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/todos/{{t2_todo_id_1}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"todos",
+								"{{t2_todo_id_1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Tenant 1 Todo As Tenant 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0e3f9042-012f-4823-a44b-da320070f467",
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-TENANT-ID",
+								"value": "{{tenant_2_id}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/todos/{{t1_todo_id_1}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"todos",
+								"{{t1_todo_id_1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Complete another tenant's Todo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a1c8c96c-5651-445c-a740-2507b171d7b0",
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-TENANT-ID",
+								"value": "{{tenant_1_id}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/todos/{{t2_todo_id_2}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"todos",
+								"{{t2_todo_id_2}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
