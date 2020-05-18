@@ -5,3 +5,6 @@ In this repository, I have tried my hand at creating two different multi tenancy
 2. Schema per tenant strategy
 
 In addition, there is also a third project, which implements both of these strategies in a single application, with a configuration property that can be used to choose the preferred strategy.
+
+
+The ``multi-tenant-app-postman-tests`` project contains all the Postman tests and the environment necessary to execute tests for all the three projects.
