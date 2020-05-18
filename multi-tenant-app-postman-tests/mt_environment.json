@@ -4,12 +4,12 @@
 	"values": [
 		{
 			"key": "tenant_1_id",
-			"value": "T1",
+			"value": "t1",
 			"enabled": true
 		},
 		{
 			"key": "tenant_2_id",
-			"value": "T2",
+			"value": "t2",
 			"enabled": true
 		}
 	],
